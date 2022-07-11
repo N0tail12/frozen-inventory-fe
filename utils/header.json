@@ -1,0 +1,19 @@
+[
+  {
+    "key": "ellipsis",
+    "name": "",
+    "icon": "fas fa-chevron-down",
+    "link": "",
+    "position": 1,
+    "hideDownIcon": false,
+    "items": [
+      {
+        "key": "logout",
+        "name": "logout",
+        "icon": "fas fa-sign-out-alt mr-1",
+        "link": "",
+        "subItems": []
+      }
+    ]
+  }
+]
