@@ -1,6 +1,6 @@
-# jira-qcd-client
+# frozen-inventory-fe
 
-> Jira Qcd Client
+> Frozen Inventory
 
 ## Build Setup
 
