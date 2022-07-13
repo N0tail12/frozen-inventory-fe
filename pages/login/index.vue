@@ -55,7 +55,6 @@ export default {
         localStorage.setItem("token", response.data);
         this.$router.push("/");
       } catch (error) {
-        console.log(error);
         this.$notification.error({
           message: this.$t("login_failed"),
           description: "Ga",
