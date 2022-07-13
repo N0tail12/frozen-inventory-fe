@@ -22,7 +22,6 @@
         </div>
       </template>
       <template slot="stock_name" slot-scope="text, record">{{ record.stock_name }}</template>
-      <template slot="stock_code" slot-scope="text, record">{{ record.stock_code }}</template>
       <template slot="stock_price" slot-scope="text, record">{{ record.stock_price }}</template>
       <template slot="stock_lot_number" slot-scope="text, record">{{ record.stock_lot_number }}</template>
       <template slot="manufacture_date" slot-scope="text, record">{{
@@ -70,19 +69,26 @@ export default {
     }),
     dataSource() {
       let clone = _.cloneDeep(this.itemInfo);
-      console.log(clone);
       return clone;
     }
   },
   methods: {
     ...mapActions({
-      getAllItem: "modules/dashboard/getAllItem"
+      getAllItem: "modules/dashboard/getAllItem",
+      deleteItem: "modules/dashboard/deleteItem"
     }),
     gotoDetail(id) {
       this.$router.push(`/dashboard/${id}`);
     },
-    handleDelete(id) {
-      console.log(id);
+    async handleDelete(id) {
+      let data = await this.deleteItem(id);
+      if (data) {
+        this.$notification.success({
+          message: "Delete Successfully",
+          duration: 2.5
+        });
+        await this.getAllItem();
+      }
     }
   }
 };

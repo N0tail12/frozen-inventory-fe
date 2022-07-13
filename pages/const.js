@@ -7,12 +7,6 @@ export const columns = [
     align: "left"
   },
   {
-    slots: { title: "stock_code" },
-    key: "stock_code",
-    scopedSlots: { customRender: "stock_code" },
-    align: "left"
-  },
-  {
     slots: { title: "stock_price" },
     key: "stock_price",
     scopedSlots: { customRender: "stock_price" },
