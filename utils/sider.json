@@ -5,5 +5,19 @@
     "a-icon": "dashboard",
     "link": "/",
     "items": []
+  },
+  {
+    "key": "expiration_soon",
+    "name": "expiration_soon",
+    "a-icon": "calendar",
+    "link": "/expiration_soon",
+    "items": []
+  },
+  {
+    "key": "category",
+    "name": "category",
+    "a-icon": "appstore",
+    "link": "/category",
+    "items": []
   }
 ]

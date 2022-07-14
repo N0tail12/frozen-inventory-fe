@@ -23,5 +23,6 @@
   "loading": "Loading",
   "category": "Category",
   "duration": "Duration",
-  "save": "Save"
+  "save": "Save",
+  "expiration_soon": "Expire Inventory"
 }

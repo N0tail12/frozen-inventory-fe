@@ -1,11 +1,8 @@
 <template>
   <a-card class="shadow">
-    <h1>{{ $t("dashboard") }}</h1>
+    <h1>{{ $t("expiration_soon") }}</h1>
     <a-row type="flex" align="bottom" justify="space-between">
       <span class="text-bold">{{ $t("total_result") }} : {{ dataSource.length }}</span>
-      <a-button type="primary" @click="gotoDetail('add')" style="display: inline-block">
-        <i class="fas fa-plus mr-2"></i> <span>{{ $t("create") }}</span>
-      </a-button>
     </a-row>
     <a-table
       class="mt-1"
@@ -29,6 +26,15 @@
       }}</template>
       <template slot="expiration_date" slot-scope="text, record"
         >{{ $moment(record.expiration_date).format("YYYY-MM-DD") }}
+        <a-tag color="orange">
+          {{ $t("expiration_soon") }} :
+          {{
+            $moment(record.expiration_date)
+              .local()
+              .diff($moment().local(), "days")
+          }}
+          days
+        </a-tag>
       </template>
       <template slot="category_name" slot-scope="text, record">{{ record.category_name }}</template>
       <template slot="action" slot-scope="text, record">
@@ -36,7 +42,7 @@
           <a-button icon="control" @click="gotoDetail(record.stock_code)"></a-button>
         </a-tooltip>
 
-        <a-tooltip :title="$t('delete')">
+        <!-- <a-tooltip :title="$t('delete')">
           <a-popconfirm
             :title="$t('are_you_sure')"
             :oke-text="$t('yes')"
@@ -45,7 +51,7 @@
           >
             <a-button type="danger" icon="delete"></a-button>
           </a-popconfirm>
-        </a-tooltip>
+        </a-tooltip> -->
       </template>
     </a-table>
   </a-card>
@@ -67,8 +73,12 @@ export default {
     ...mapState({
       itemInfo: state => state.modules["dashboard"].itemInfo
     }),
+    ...mapGetters({
+      filterExpiration: "modules/dashboard/filterExpiration"
+    }),
     dataSource() {
-      let clone = _.cloneDeep(this.itemInfo);
+      let clone = _.cloneDeep(this.filterExpiration);
+      clone = clone.filter(item => item.type === "expiration_soon");
       return clone;
     }
   },
@@ -79,16 +89,6 @@ export default {
     }),
     gotoDetail(id) {
       this.$router.push(`/dashboard/${id}`);
-    },
-    async handleDelete(id) {
-      let data = await this.deleteItem(id);
-      if (data) {
-        this.$notification.success({
-          message: "Delete Successfully",
-          duration: 2.5
-        });
-        await this.getAllItem();
-      }
     }
   }
 };
