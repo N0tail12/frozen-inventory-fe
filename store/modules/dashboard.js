@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const state = () => ({
   itemInfo: []
 });
@@ -29,5 +31,16 @@ export const actions = {
   async deleteItem({ commit }, id) {
     let { data } = await this.$request.delete("/api/dashboard/delete-item?id=" + id);
     return data;
+  }
+};
+
+export const getters = {
+  filterExpiration(state) {
+    let today = moment();
+    return state.itemInfo.map(item => {
+      if (today.isAfter(moment(item.expiration_date).subtract(8, "d"))) item.type = "expiration_soon";
+      else item.type = "normal";
+      return item;
+    });
   }
 };

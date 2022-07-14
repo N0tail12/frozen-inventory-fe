@@ -112,8 +112,8 @@ export default {
       let { data } = await this.getItemByID(this.routeId);
       this.itemData = data[0];
       if (this.itemData.stock_code) {
-        this.itemData.manufacture_date = this.$moment(this.itemData.manufacture_date);
-        this.itemData.expiration_date = this.$moment(this.itemData.expiration_date);
+        this.itemData.manufacture_date = this.$moment(this.itemData.manufacture_date).local();
+        this.itemData.expiration_date = this.$moment(this.itemData.expiration_date).local();
         this.loading = false;
       }
     } else this.loading = false;
