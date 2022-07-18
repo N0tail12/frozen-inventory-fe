@@ -1,12 +1,11 @@
 <template>
   <a-card class="shadow">
-    <h1>{{ $t("dashboard") }}</h1>
-    <a-row type="flex" align="bottom" justify="space-between">
-      <span class="text-bold">{{ $t("total_result") }} : {{ dataSource.length }}</span>
-      <a-button type="primary" @click="gotoDetail('add')" style="display: inline-block">
-        <i class="fas fa-plus mr-2"></i> <span>{{ $t("create") }}</span>
-      </a-button>
+    <h1>{{ $t("home") }}</h1>
+
+    <a-row type="flex" align="bottom" justify="center">
+      <apexchart type="pie" width="500" height="500" :options="chartOptions" :series="series"></apexchart>
     </a-row>
+    <h1 class="mt-3">{{ $t("dashboard") }}</h1>
     <a-table
       class="mt-1"
       bordered
@@ -22,8 +21,6 @@
         </div>
       </template>
       <template slot="stock_name" slot-scope="text, record">{{ record.stock_name }}</template>
-      <template slot="stock_price" slot-scope="text, record">{{ record.stock_price }}</template>
-      <template slot="stock_lot_number" slot-scope="text, record">{{ record.stock_lot_number }}</template>
       <template slot="manufacture_date" slot-scope="text, record">{{
         $moment(record.manufacture_date).format("YYYY-MM-DD")
       }}</template>
@@ -31,42 +28,58 @@
         >{{ $moment(record.expiration_date).format("YYYY-MM-DD") }}
       </template>
       <template slot="category_name" slot-scope="text, record">{{ record.category_name }}</template>
-      <template slot="action" slot-scope="text, record">
-        <a-tooltip :title="$t('detail')">
-          <a-button icon="control" @click="gotoDetail(record.stock_code)"></a-button>
-        </a-tooltip>
-
-        <a-tooltip :title="$t('delete')">
-          <a-popconfirm
-            :title="$t('are_you_sure')"
-            :oke-text="$t('yes')"
-            :cancel-text="$t('no')"
-            @confirm="handleDelete(record.stock_code)"
-          >
-            <a-button type="danger" icon="delete"></a-button>
-          </a-popconfirm>
-        </a-tooltip>
-      </template>
     </a-table>
   </a-card>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { columns } from "./const";
 export default {
   data() {
     return {
-      columns
+      columns,
+      chartOptions: {
+        chart: {
+          width: 380,
+          type: "pie"
+        },
+        labels: [this.$t("normal"), this.$t("expiration_soon"), this.$t("expired")],
+        colors: ["#40ff00", "#E91E63", "#ff3300"],
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200
+              },
+              legend: {
+                position: "bottom"
+              }
+            }
+          }
+        ]
+      }
     };
-  },
-  async created() {
-    await this.getAllItem();
   },
   computed: {
     ...mapState({
-      itemInfo: state => state.modules["dashboard"].itemInfo
+      ...mapState({
+        itemInfo: state => state.modules["dashboard"].itemInfo
+      })
     }),
+    ...mapGetters({
+      filterExpiration: "modules/dashboard/filterExpiration"
+    }),
+    series() {
+      let normal = this.filterExpiration.reduce((total, item) => (item.type == "normal" ? total + 1 : total), 0);
+      let expiration_soon = this.filterExpiration.reduce(
+        (total, item) => (item.type == "expiration_soon" ? total + 1 : total),
+        0
+      );
+      let expired = this.filterExpiration.reduce((total, item) => (item.type == "expired" ? total + 1 : total), 0);
+      return [normal, expiration_soon, expired];
+    },
     dataSource() {
       let clone = _.cloneDeep(this.itemInfo);
       return clone;
@@ -74,22 +87,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllItem: "modules/dashboard/getAllItem",
-      deleteItem: "modules/dashboard/deleteItem"
-    }),
-    gotoDetail(id) {
-      this.$router.push(`/dashboard/${id}`);
-    },
-    async handleDelete(id) {
-      let data = await this.deleteItem(id);
-      if (data) {
-        this.$notification.success({
-          message: "Delete Successfully",
-          duration: 2.5
-        });
-        await this.getAllItem();
-      }
-    }
+      getAllItem: "modules/dashboard/getAllItem"
+    })
+  },
+  async created() {
+    await this.getAllItem();
   }
 };
 </script>

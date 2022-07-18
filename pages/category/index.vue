@@ -3,7 +3,7 @@
     <h1>{{ $t("category") }}</h1>
     <a-row type="flex" align="bottom" justify="space-between">
       <span class="text-bold">{{ $t("total_result") }} : {{ dataSource.length }}</span>
-      <a-button type="primary" style="display: inline-block">
+      <a-button type="primary" style="display: inline-block" @click="handleAdd">
         <i class="fas fa-plus mr-2"></i> <span>{{ $t("create") }}</span>
       </a-button>
     </a-row>
@@ -26,7 +26,7 @@
         <template slot="category_name" slot-scope="text, record">{{ record.category_name }}</template>
         <template slot="action" slot-scope="text, record">
           <a-tooltip :title="$t('detail')">
-            <a-button icon="control" @click="gotoDetail(record.stock_code)"></a-button>
+            <a-button icon="control" @click="handleDetail(record)"></a-button>
           </a-tooltip>
 
           <a-tooltip :title="$t('delete')">
@@ -34,13 +34,18 @@
               :title="$t('are_you_sure')"
               :oke-text="$t('yes')"
               :cancel-text="$t('no')"
-              @confirm="handleDelete(record.stock_code)"
+              @confirm="handleDelete(record.category_code)"
             >
               <a-button type="danger" icon="delete"></a-button>
             </a-popconfirm>
           </a-tooltip>
         </template>
       </a-table>
+      <a-modal :visible="showModal" @ok="handleOk(modalData)" @cancel="handleCancel" :title="$t('category_setting')">
+        <a-form-item v-bind="layoutFormItem" :label="$t('category_name')">
+          <a-input :value="modalData.category_name" v-model="modalData.category_name"></a-input>
+        </a-form-item>
+      </a-modal>
     </a-row>
   </a-card>
 </template>
@@ -51,7 +56,16 @@ import { columns } from "./const";
 export default {
   data() {
     return {
-      columns
+      columns,
+      modalData: {
+        category_name: ""
+      },
+      showModal: false,
+      isCreated: false,
+      layoutFormItem: {
+        labelCol: { span: 4 },
+        wrapperCol: { span: 12 }
+      }
     };
   },
   async created() {
@@ -68,17 +82,61 @@ export default {
   },
   methods: {
     ...mapActions({
-      getAllCategory: "modules/category/getAllCategory"
+      getAllCategory: "modules/category/getAllCategory",
+      addCategory: "modules/category/addCategory",
+      updateCategory: "modules/category/updateCategory",
+      deleteCategory: "modules/category/deleteCategory"
     }),
     async handleDelete(id) {
-      let data = await this.deleteItem(id);
+      let data = await this.deleteCategory(id);
+      console.log(data);
       if (data) {
         this.$notification.success({
           message: "Delete Successfully",
           duration: 2.5
         });
-        await this.getAllItem();
+        await this.getAllCategory();
       }
+    },
+    async handleOk(id) {
+      if (this.isCreated) {
+        let data = await this.addCategory(this.modalData);
+        if (data) {
+          this.$notification.success({
+            message: "Add Successfully",
+            duration: 2.5
+          });
+          await this.getAllCategory();
+          this.showModal = false;
+          this.isCreated = false;
+        }
+      } else {
+        let data = await this.updateCategory(id);
+        if (data) {
+          this.$notification.success({
+            message: "Update Successfully",
+            duration: 2.5
+          });
+          await this.getAllCategory();
+          this.showModal = false;
+          this.isCreated = false;
+        }
+      }
+    },
+    handleCancel() {
+      this.showModal = false;
+      this.isCreated = false;
+    },
+    handleAdd() {
+      this.showModal = true;
+      this.isCreated = true;
+      this.modalData.category_name = "";
+    },
+    handleDetail(data) {
+      this.modalData = _.cloneDeep(data);
+      this.showModal = true;
+      this.isCreated = false;
+      console.log(this.modalData);
     }
   }
 };

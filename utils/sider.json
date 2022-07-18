@@ -1,9 +1,16 @@
 [
   {
+    "key": "home",
+    "name": "home",
+    "a-icon": "home",
+    "link": "/",
+    "items": []
+  },
+  {
     "key": "dashboard",
     "name": "dashboard",
     "a-icon": "dashboard",
-    "link": "/",
+    "link": "/dashboard",
     "items": []
   },
   {
