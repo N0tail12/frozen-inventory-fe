@@ -99,5 +99,9 @@ export default {
   },
   router: {
     middleware: ["lang"]
+  },
+  target: "static",
+  router: {
+    base: "/<repository-name>/"
   }
 };
