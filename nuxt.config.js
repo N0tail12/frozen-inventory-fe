@@ -8,14 +8,14 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: process.env.TITLE || "Test",
+    title: process.env.TITLE || "一番寒い",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
       {
         hid: "description",
         name: "description",
-        content: process.env.DESCRIPTION || "Test"
+        content: process.env.DESCRIPTION || "一番寒い"
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
