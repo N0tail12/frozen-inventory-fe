@@ -102,6 +102,6 @@ export default {
   },
   target: "static",
   router: {
-    base: "/<repository-name>/"
+    base: "/frozen-inventory-fe/"
   }
 };
