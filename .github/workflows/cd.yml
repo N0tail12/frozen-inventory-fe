@@ -2,7 +2,7 @@ name: Github pages CI
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   build:
@@ -19,11 +19,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: "npm"
       - name: Install and build
         run: |
-          yarn install
-          yarn generate
+          npm install
+          npm run generate
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
