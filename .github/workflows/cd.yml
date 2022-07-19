@@ -1,33 +1,31 @@
-name: cd
+name: Github pages CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ['main']
 
 jobs:
-  cd:
-    runs-on: ${{ matrix.os }}
+  build:
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        node: [14]
+        node-version: [16.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-
-      - name: Setup node env
-        uses: actions/setup-node@v2.1.2
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
-
-      - name: Install dependencies
-        run: yarn
-
-      - name: Generate
-        run: yarn generate
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Install and build
+        run: |
+          yarn install
+          yarn generate
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dist # The folder the action should deploy.
