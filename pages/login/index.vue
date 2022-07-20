@@ -16,9 +16,6 @@
               </a-form-item>
             </ValidationProvider>
             <a-button class="mt-3" type="primary" htmlType="submit" block>{{ "login" }}</a-button>
-            <a-row class="mt-1">
-              <nuxt-link style="float: right" to="/forgot-password">{{ $t("forgot_password") }}</nuxt-link>
-            </a-row>
           </a-form>
         </ValidationObserver>
       </a-card>
