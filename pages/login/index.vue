@@ -28,7 +28,7 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   layout: "guest",
-  // middleware: "login",
+  middleware: "login",
   computed: {
     ...mapState({
       user: state => state.modules["author"].user
