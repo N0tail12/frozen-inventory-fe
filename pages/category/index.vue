@@ -89,7 +89,6 @@ export default {
     }),
     async handleDelete(id) {
       let data = await this.deleteCategory(id);
-      console.log(data);
       if (data) {
         this.$notification.success({
           message: "Delete Successfully",
@@ -136,7 +135,6 @@ export default {
       this.modalData = _.cloneDeep(data);
       this.showModal = true;
       this.isCreated = false;
-      console.log(this.modalData);
     }
   }
 };

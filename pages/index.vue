@@ -44,7 +44,7 @@ export default {
           width: 380,
           type: "pie"
         },
-        labels: [this.$t("normal"), this.$t("expiration_soon"), this.$t("expired")],
+        labels: [this.$t("normal"), this.$t("expire_soon"), this.$t("expired")],
         colors: ["#40ff00", "#E91E63", "#ff3300"],
         responsive: [
           {
@@ -73,12 +73,12 @@ export default {
     }),
     series() {
       let normal = this.filterExpiration.reduce((total, item) => (item.type == "normal" ? total + 1 : total), 0);
-      let expiration_soon = this.filterExpiration.reduce(
-        (total, item) => (item.type == "expiration_soon" ? total + 1 : total),
+      let expire_soon = this.filterExpiration.reduce(
+        (total, item) => (item.type == "expire_soon" ? total + 1 : total),
         0
       );
       let expired = this.filterExpiration.reduce((total, item) => (item.type == "expired" ? total + 1 : total), 0);
-      return [normal, expiration_soon, expired];
+      return [normal, expire_soon, expired];
     },
     dataSource() {
       let clone = _.cloneDeep(this.itemInfo);

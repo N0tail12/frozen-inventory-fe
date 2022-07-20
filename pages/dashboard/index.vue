@@ -17,7 +17,16 @@
     >
       <div slot="no" slot-scope="text, record, index">{{ index + 1 }}</div>
       <template v-for="column in columns" :slot="column.slots.title">
-        <div :key="column.key">
+        <div :key="column.key" v-if="column.key == 'category_name'">
+          <span>{{ $t(column.slots.title) }}</span>
+          <br />
+          <a-select v-model="dataFilter.category_name" mode="multiple" alowClear style="width: 200px">
+            <a-select-option v-for="item in category" :key="item.category_code" :values="item.category_code">{{
+              item.category_name
+            }}</a-select-option>
+          </a-select>
+        </div>
+        <div :key="column.key" v-else>
           <span>{{ $t(column.slots.title) }}</span>
         </div>
       </template>
@@ -53,29 +62,37 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import { removeVietnameseTones } from "@/utils/skillSet/skillSet.utils.js";
 import { columns } from "./const";
 export default {
   data() {
     return {
-      columns
+      columns,
+      dataFilter: {
+        category_name: []
+      }
     };
   },
   async created() {
     await this.getAllItem();
+    await this.getAllCategory();
   },
   computed: {
     ...mapState({
-      itemInfo: state => state.modules["dashboard"].itemInfo
+      itemInfo: state => state.modules["dashboard"].itemInfo,
+      category: state => state.modules["category"].category
     }),
     dataSource() {
       let clone = _.cloneDeep(this.itemInfo);
+      clone = this.filerDataByName(clone);
       return clone;
     }
   },
   methods: {
     ...mapActions({
       getAllItem: "modules/dashboard/getAllItem",
-      deleteItem: "modules/dashboard/deleteItem"
+      deleteItem: "modules/dashboard/deleteItem",
+      getAllCategory: "modules/category/getAllCategory"
     }),
     gotoDetail(id) {
       this.$router.push(`/dashboard/${id}`);
@@ -89,6 +106,20 @@ export default {
         });
         await this.getAllItem();
       }
+    },
+    filerDataByName(clone) {
+      if (!this.dataFilter.category_name.length) {
+        return clone;
+      }
+      clone = clone.filter(item => {
+        for (let i = 0; i < this.dataFilter.category_name.length; ++i) {
+          if (item.category_id == this.dataFilter.category_name[i]) {
+            return true;
+          }
+        }
+        return false;
+      });
+      return clone;
     }
   }
 };
