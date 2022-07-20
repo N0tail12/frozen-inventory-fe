@@ -24,5 +24,10 @@
   "category": "Danh mục",
   "duration": "Thời lượng",
   "save": "Lưu",
-  "expiration_soon": "Sản phẩm sắp hết hạn"
+  "expiration_soon": "Sản phẩm sắp hết hạn",
+  "home": "Trang chủ",
+  "expire_soon": "Sắp hết hạn",
+  "expired": "Hết hạn",
+  "all": "Toàn bộ",
+  "normal": "Bình thường"
 }

@@ -24,5 +24,10 @@
   "category": "カテゴリ",
   "duration": "期間",
   "save": "保存",
-  "expiration_soon": "Expire Inventory"
+  "expiration_soon": "Expire Inventory",
+  "home": "ホームページ",
+  "expire_soon": "Expire Soon",
+  "expired": "Expired",
+  "all": "All",
+  "normal": "Normal"
 }

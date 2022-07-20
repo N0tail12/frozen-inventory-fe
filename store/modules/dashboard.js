@@ -39,7 +39,7 @@ export const getters = {
     let today = moment();
     return state.itemInfo.map(item => {
       if (today.isAfter(moment(item.expiration_date))) item.type = "expired";
-      else if (today.isAfter(moment(item.expiration_date).subtract(8, "d"))) item.type = "expiration_soon";
+      else if (today.isAfter(moment(item.expiration_date).subtract(8, "d"))) item.type = "expire_soon";
       else item.type = "normal";
       return item;
     });
